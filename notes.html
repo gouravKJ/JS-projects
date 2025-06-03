@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+    .notescontainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .note {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 10px;
+      width: 200px;
+      min-height: 100px;
+      position: relative;
+      border-radius: 6px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .note[contenteditable="true"] {
+      outline: none;
+    }
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    button.add-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Notes App</h2>
+    <button class="add-btn" onclick="addNote()">Add Note</button>
+    <div class="notescontainer" id="notescontainer"></div>
+  </div>
+
+  <script>
+    const notescontainer = document.getElementById("notescontainer");
+
+       window.onload=function(){
+        const savedNotes=JSON.parse(localStorage.getItem("notes")  || "[]") ;
+        savedNotes.forEach(text=>createNote(text));
+       }
+
+
+     
+      function addNote(){
+        createNote("write something");
+        saveNotes();
+      }
+
+
+
+      function createNote(text="")
+      {
+        const note=document.createElement("div");
+        note.className="note";
+   note.innerHTML = `
+        <button class="delete-btn" onclick="deleteNote(this)">x</button>
+        <p contenteditable="true" oninput="saveNotes()">${text}</p>
+      `;
+
+      notescontainer.appendChild(note)
+      }
+
+      function deleteNote(btn){
+         btn.parentElement.remove();
+      }
+
+   function saveNotes() {
+      const notes = [];
+      document.querySelectorAll(".note p").forEach(p => {
+        notes.push(p.innerText.trim());
+      });
+      localStorage.setItem("notes", JSON.stringify(notes));
+    }
+
+
+
+
+
+
+
+  </script>
+
+</body>
+</html>
