@@ -1,126 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <div class="container">
-        <div class="calculator">
-            <h1>AGE CALCULATOR</h1>
-            <input type="date" id="date">
-            <button onclick="calculateage()">Calculate</button>
-        </div>
-
-    </div>
-    <p id="result"></p>
-    <style>
-        .container
-        {
-            width:100%;
-            min-height: 100vh;
-            background: linear-gradient(135deg,#4203a9,#90bafc);
-            color:#fff;
-            padding: 10px;
-        }
-        button{
-            background-color: yellow;
-            border-radius: 10px;
-            font-size: medium;
-            font-weight: bolder;
-            font-style: oblique;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        
-        
-        }
-    </style>
+<input type="date" id="date" />
+<button onclick="calculateAge()">Calculate Age</button>
+<p id="result"></p>
 
 <script>
+    // Set max date to today so users can't select a future birthdate
+    document.getElementById("date").max = new Date().toISOString().split("T")[0];
 
-let userinput=document.getElementById("date");
-userinput.max=new date().toisostring().split("t")[0];
+    function calculateAge() {
+        let input = document.getElementById("date").value;
+        if (!input) {
+            document.getElementById("result").innerText = "Please select a date.";
+            return;
+        }
 
-let result=document.getElementById("result");
+        let birthDate = new Date(input);
+        let today = new Date();
 
-function calculateage()
-{
+        let birthYear = birthDate.getFullYear();
+        let birthMonth = birthDate.getMonth();
+        let birthDay = birthDate.getDate();
 
-  let birthdate=new date(userinput.value);
-   letd1=birthdate.getdate();
-   let m1=birthdate.getmonth()+1;
-   let y1=birthdate.getfullyear();
+        let currentYear = today.getFullYear();
+        let currentMonth = today.getMonth();
+        let currentDay = today.getDate();
 
+        let ageYear = currentYear - birthYear;
+        let ageMonth = currentMonth - birthMonth;
+        let ageDay = currentDay - birthDay;
 
-   let today=new date();
+        // Adjust months and days if needed
+        if (ageDay < 0) {
+            ageMonth--;
+            let daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
+            ageDay += daysInPrevMonth;
+        }
 
-let d2=birthdate.getdate();
-   let m2=birthdate.getmonth()+1;
-   let y2=birthdate.getfullyear();
+        if (ageMonth < 0) {
+            ageYear--;
+            ageMonth += 12;
+        }
 
-
-let d3;m3,y3;
-
-
-y3=y2-y1;
-
-if(m2>=m1)
-{
-    m3=m2-m1;
-
-} else{
-    y3--;
-    m3=12+m2-m1;
-}
-if(d2>=d1)
-{
-    d3=d2-d1;
-}
-else
-{
-    m3--;
-    d3=getdaysinmonth(y1,m1)+d2-d1;
-}
-if(m3<0) m3=11;y3--;
-
-result.innerHTML=`you are ${y3} years,${m3} months,${d3}days`
-
-}
-
-function getdaysinmonth(year,month){
-    return new date(year,month,0).getdate();
-}
-
-
-
-
-
-
-
-
-
-
-
+        document.getElementById("result").innerText =
+            `You are ${ageYear} years, ${ageMonth} months, and ${ageDay} days old.`;
+    }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body>
-</html>
